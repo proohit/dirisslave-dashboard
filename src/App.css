@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.logContainer {
+  max-height: 400px;
+  overflow-y: 'auto';
+  padding: 16;
+  overflow-x: 'hidden';
+}

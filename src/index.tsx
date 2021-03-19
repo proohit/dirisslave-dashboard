@@ -3,10 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { AppBar, Button, CssBaseline, Toolbar } from '@material-ui/core';
 
+const queryClient = new QueryClient();
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <AppBar position="sticky">
+        <Toolbar>
+          DirisSlave Dashboard
+          <Button variant="text">Logs</Button>
+        </Toolbar>
+      </AppBar>
+      <CssBaseline />
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
