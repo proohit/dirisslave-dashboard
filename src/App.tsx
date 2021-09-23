@@ -6,16 +6,24 @@ import { CurrentlyPlayingList } from './CurrentlyPlaying';
 import { GuildsList } from './GuildsList';
 import { Log } from './Log';
 
-const url = 'http://localhost:8080';
+const url =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8081/api'
+    : 'https://dirisslave.timurnet.de/api';
 export interface MusicStatusEntry {
   guildName: string;
   songTitle: string;
   currentSongPosition: string;
 }
 
+export interface LogEntry {
+  message: string;
+  timestamp: string;
+  level: string;
+}
+
 const getJson = async (url: string) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return await (await fetch(url)).json();
+  return (await fetch(url)).json();
 };
 
 function App() {
@@ -24,24 +32,16 @@ function App() {
     () => getJson(`${url}/guilds`)
   );
 
-  const {
-    data: currentlyPlaying,
-    isLoading: currentlyPlayingLoading,
-  } = useQuery<MusicStatusEntry[]>('currentlyPlaying', () =>
-    getJson(`${url}/nowplaying`)
-  );
+  const { data: currentlyPlaying, isLoading: currentlyPlayingLoading } =
+    useQuery<MusicStatusEntry[]>('currentlyPlaying', () =>
+      getJson(`${url}/nowplaying`)
+    );
 
-  const { data: logText, isLoading: logLoading } = useQuery<string>(
+  const { data: logText, isLoading: logLoading } = useQuery<LogEntry[]>(
     'log',
-    async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const data = await fetch(`${url}/logs`);
-      return data.text();
-    }
+    () => getJson(`${url}/logs`)
   );
 
-  const renderCurrentlyPlaying =
-    currentlyPlayingLoading || !isNaN(currentlyPlaying?.length as number);
   return (
     <Container>
       <Grid container direction="column" spacing={5}>
@@ -57,10 +57,8 @@ function App() {
           />
         </Grid>
         <Grid item>
-          <Typography variant="h5">Log</Typography>
-          <IconButton>
-            <
-          </IconButton>
+          <Typography variant="h5">Logs</Typography>
+          <IconButton></IconButton>
           <Log loading={logLoading} log={logText} />
         </Grid>
       </Grid>
