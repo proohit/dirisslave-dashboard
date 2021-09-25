@@ -20,6 +20,7 @@ export interface LogEntry {
   message: string;
   timestamp: string;
   level: string;
+  stackTrace: string;
 }
 
 const getJson = async (url: string) => {

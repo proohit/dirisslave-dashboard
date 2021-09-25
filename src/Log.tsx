@@ -108,9 +108,9 @@ export const Log: FC<LogProps> = (props) => {
           {filteredLogs?.map((entry, index) => (
             <Accordion key={index}>
               <AccordionSummary expandIcon={<ExpandMore />}>
-                {entry.timestamp}, {entry.level}
+                {entry.timestamp}, {entry.level}, {entry.message}
               </AccordionSummary>
-              <AccordionDetails>{entry.message}</AccordionDetails>
+              <AccordionDetails>{entry.stackTrace}</AccordionDetails>
             </Accordion>
           ))}
         </>
